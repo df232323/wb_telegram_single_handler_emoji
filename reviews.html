@@ -1,0 +1,138 @@
+<!DOCTYPE html><html lang="ru"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Отзывы — Поддержка ППВЗ</title>
+<link rel="stylesheet" href="assets/style.css"></head><body>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo-text" href="index.html">WILDBERRIES</a>
+    <input type="checkbox" id="menu-toggle" class="menu-toggle" hidden>
+      <label for="menu-toggle" class="nav-dots" aria-label="Меню" role="button"></label>
+      <nav>
+      <ul>
+        <li><a href="index.html" >🏠 Главная</a></li>
+        <li><a href="about.html" >🧑‍💼 Вакансия</a></li>
+        <li><a href="pay.html" >💰 Зарплата</a></li>
+        <li><a href="form.html" >📝 Анкета</a></li>
+        <li><a href="reviews.html" class="active">⭐ Отзывы</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="wrap">
+  <h2 class="section-title center">Наш опыт</h2>
+  <p class="center muted">Отзывы наших сотрудников о своей работе.</p>
+  <div class="testimonials">
+    <article class="review">
+      <div class="head"><div class="avatar">👩‍💼</div><div><div class="name">Василиса</div><div class="meta">25 лет, 2 года в команде</div></div></div>
+      <p>Очень нравится работа, интересная. Удалёнка и дружный коллектив — огромный плюс. Выплаты ежедневно.</p>
+    </article>
+    <article class="review">
+      <div class="head"><div class="avatar">👩‍💻</div><div><div class="name">Татьяна</div><div class="meta">46 лет, 10 месяцев в команде</div></div></div>
+      <p>Классный коллектив, отзывчивое руководство. Есть рост и переход в другие отделы.</p>
+    </article>
+    <article class="review">
+      <div class="head"><div class="avatar">👨‍💼</div><div><div class="name">Антон</div><div class="meta">27 лет, 6 месяцев в команде</div></div></div>
+      <p>Работа увлекательная, руководители поддерживают, всегда есть новые задачи.</p>
+    </article>
+    <article class="review">
+      <div class="head"><div class="avatar">👩</div><div><div class="name">Елена</div><div class="meta">33 года, 5 месяцев в команде</div></div></div>
+      <p>Нравится разбирать тикеты. Работа по душе и гибкий график.</p>
+    </article>
+    <article class="review">
+      <div class="head"><div class="avatar">👩‍🎓</div><div><div class="name">Мария</div><div class="meta">22 года, 8 месяцев в команде</div></div></div>
+      <p>Без опыта вошла за неделю. Обучение и наставники топ!</p>
+    </article>
+    <article class="review">
+      <div class="head"><div class="avatar">👨‍💻</div><div><div class="name">Сергей</div><div class="meta">29 лет, 1 год в команде</div></div></div>
+      <p>Много автоматизации, всё прозрачно. Доход зависит от активности.</p>
+    </article></div>
+  <div class="arrows"><div class="arrow">←</div><div class="arrow">→</div></div>
+</section>
+
+<footer class="wrap center copy">
+  © 2025 Wildberries — поддержка ППВЗ
+</footer>
+<script src="assets/config.js"></script>
+<script src="assets/app.js"></script>
+
+
+
+
+<script>
+// Robust pagination: physically re-renders the visible cards, independent of CSS/display quirks
+(function(){
+  const container = document.querySelector('.testimonials');
+  const arrows = document.querySelectorAll('.arrows .arrow');
+  if(!container || arrows.length < 2) return;
+
+  const all = Array.from(container.querySelectorAll('.review'));
+  const original = all.slice(); // keep original order
+
+  function perPage(){
+    if (window.innerWidth < 640) return 1;
+    if (window.innerWidth < 1024) return 4;
+    return 6;
+  }
+
+  let page = 0;
+
+  function chunk(arr, size){
+    const out = [];
+    for(let i=0;i<arr.length;i+=size) out.push(arr.slice(i,size+i));
+    return out;
+  }
+
+  function render(){
+    const n = perPage();
+    const pages = chunk(original, n);
+    if (page >= pages.length) page = 0;
+    if (page < 0) page = pages.length - 1;
+
+    // Clear and append needed cards
+    container.innerHTML = '';
+    pages[page].forEach(card => container.appendChild(card));
+
+    // smooth small fade-in
+    requestAnimationFrame(()=>{
+      container.querySelectorAll('.review').forEach(r=>{
+        r.style.opacity = '0';
+        r.style.transform = 'translateY(10px)';
+        setTimeout(()=>{
+          r.style.transition = 'all .35s ease';
+          r.style.opacity = '1';
+          r.style.transform = 'translateY(0)';
+        }, 10);
+      });
+    });
+  }
+
+  function next(){ page++; render(); }
+  function prev(){ page--; render(); }
+
+  arrows[0].addEventListener('click', (e)=>{ e.preventDefault(); prev(); reset(); });
+  arrows[1].addEventListener('click', (e)=>{ e.preventDefault(); next(); reset(); });
+  window.addEventListener('resize', render);
+
+  let timer = setInterval(next, 4000);
+  function reset(){ clearInterval(timer); timer = setInterval(next, 4000); }
+
+  render();
+})();
+</script>
+
+<script>
+/* mobile nav toggle */
+(function(){
+  const btn=document.querySelector('.nav-toggle');
+  const list=document.querySelector('header nav ul');
+  if(!btn||!list) return;
+  btn.addEventListener('click',()=>{
+    btn.classList.toggle('open');
+    list.classList.toggle('open');
+    document.body.classList.toggle('menu-open', list.classList.contains('open'));
+  });
+})();
+</script>
+</body></html>

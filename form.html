@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Анкета — Поддержка ППВЗ</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo-text" href="index.html">WILDBERRIES</a>
+    <input type="checkbox" id="menu-toggle" class="menu-toggle" hidden>
+      <label for="menu-toggle" class="nav-dots" aria-label="Меню" role="button"></label>
+      <nav>
+      <ul>
+        <li><a href="index.html">🏠 Главная</a></li>
+        <li><a href="about.html">🧑‍💼 Вакансия</a></li>
+        <li><a href="pay.html">💰 Зарплата</a></li>
+        <li><a href="form.html" class="active">📝 Анкета</a></li>
+        <li><a href="reviews.html">⭐ Отзывы</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="wrap">
+  <h2 class="section-title">Анкета кандидата</h2>
+  <p class="muted">Заполните короткую форму — мы сгенерируем персональный трек-код и подскажем, что делать дальше.</p>
+
+  
+  <form id="applyForm" class="wb-form" novalidate>
+    <h2 class="wb-title">Анкета кандидата</h2>
+    <p class="wb-sub">Заполните короткую форму — мы сгенерируем персональный трек-код и подскажем, что делать дальше.</p>
+    <div class="wb-grid">
+      <div class="wb-field">
+        <label class="wb-label req">Имя</label>
+        <input class="wb-input" name="firstName" type="text" placeholder="Ваше имя" required>
+      </div>
+      <div class="wb-field">
+        <label class="wb-label req">Фамилия</label>
+        <input class="wb-input" name="lastName" type="text" placeholder="Ваша фамилия" required>
+      </div>
+      <div class="wb-field">
+        <label class="wb-label req">Телефон</label>
+        <input class="wb-input" id="phone" name="phone" type="tel" inputmode="tel" placeholder="+7 (___) ___-__-__" required>
+        <div class="wb-hint">Формат: +7 999 000-00-00</div>
+      </div>
+      <div class="wb-field">
+        <label class="wb-label req">Дата рождения</label>
+        <input class="wb-input" id="dob" name="birth" type="text" placeholder="дд.мм.гггг" inputmode="numeric" maxlength="10" required>
+      </div>
+      <div class="wb-field wb-col">
+        <label class="wb-label req">Платформа смартфона</label>
+        <input type="hidden" name="platform" id="platform" value="iPhone">
+        <div class="wb-pills" data-target="platform">
+          <button type="button" class="wb-pill active" data-value="iPhone">📱 iPhone</button>
+          <button type="button" class="wb-pill" data-value="Android">🤖 Android</button>
+        </div>
+      </div>
+      <div class="wb-field wb-col">
+        <label class="wb-label req">Опыт работы</label>
+        <input type="hidden" name="experience" id="experience" value="Есть опыт">
+        <div class="wb-pills" data-target="experience">
+          <button type="button" class="wb-pill active" data-value="Есть опыт">✅ Есть опыт</button>
+          <button type="button" class="wb-pill" data-value="Без опыта">🌱 Без опыта</button>
+        </div>
+      </div>
+      <div class="wb-field">
+        <label class="wb-label req">Сколько часов готовы уделять в день?</label>
+        <input class="wb-input" name="hours" type="text" placeholder="Напр. 4" required>
+      </div>
+      <div class="wb-field">
+        <label class="wb-label req">График — напишите свой</label>
+        <input class="wb-input" name="schedule" type="text" placeholder="Напр. 5/2 или гибкий" required>
+      </div>
+    </div>
+    <div class="wb-actions">
+      <button class="wb-btn" type="submit">Отправить анкету</button>
+    </div>
+    <div class="wb-badges" aria-hidden="true">
+      <span class="wb-badge">💳 Ежедневные выплаты</span>
+      <span class="wb-badge">🎧 Работа в чате</span>
+      <span class="wb-badge">🏡 Полностью удалённо</span>
+    </div>
+    <div class="wb-foot">© 2025 Wildberries — поддержка ППВЗ</div>
+  </form>
+
+</section>
+
+<footer class="wrap center copy">
+  © 2025 Wildberries — поддержка ППВЗ
+</footer>
+
+<!-- Модальное окно успешной отправки -->
+<div id="okModal" class="modal hidden">
+  <div class="modal-card">
+    <div class="modal-title">Заявка отправлена</div>
+    <p class="center muted">Отправьте трек-код менеджеру в Telegram<br>
+      <a class="tg" href="https://t.me/WILDBERRIES_EKATERINA" target="_blank" rel="noopener">@WILDBERRIES_EKATERINA</a>
+    </p>
+
+    <div class="code-pill">
+      <span class="ok-check">✓</span>
+      <span class="muted">Ваш трек-код:</span>
+      <span id="trackCode" class="big-code">0000</span>
+    </div>
+
+    <div class="pill-actions">
+      <button id="copyTrack" class="btn-copy">Скопировать</button>
+      <a href="https://t.me/WILDBERRIES_EKATERINA" target="_blank" rel="noopener" class="btn-tg">Написать в Telegram</a>
+    </div>
+
+    <button class="modal-close link-muted" aria-label="Закрыть">Закрыть</button>
+  </div>
+</div>
+<script src="assets/config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+/* Лёгкая валидация + отправка */
+(function () {
+  const f = document.getElementById('applyForm');
+  const ok = document.getElementById('okModal');
+  const close = ok.querySelector('.modal-close');
+  const trackEl = document.getElementById('trackCode');
+  const copyBtn = document.getElementById('copyTrack');
+
+  function track() {
+    return String(Math.floor(1000 + Math.random()*9000));
+  }
+  function openModal(code) {
+    trackEl.textContent = code;
+    ok.classList.remove('hidden');
+  }
+  function closeModal() {
+    ok.classList.add('hidden');
+  }
+  close.addEventListener('click', closeModal);
+  ok.addEventListener('click', (e)=>{ if(e.target === ok) closeModal(); });
+  copyBtn.addEventListener('click', ()=>{
+    navigator.clipboard.writeText(trackEl.textContent);
+    copyBtn.textContent = 'Скопировано';
+    setTimeout(()=>copyBtn.textContent='Скопировать',1200);
+  });
+
+  f.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (!f.checkValidity()) {
+      f.reportValidity();
+      return;
+    }
+
+    const data = Object.fromEntries(new FormData(f).entries());
+    const code = track();
+
+    /* текст для телеграма */
+    const msg =
+`🟣 Новая анкета
+Имя: ${data.firstName}
+Фамилия: ${data.lastName}
+Телефон: ${data.phone}
+Дата рождения: ${data.dob}
+Платформа: ${data.phoneOS}
+Опыт: ${data.exp}
+Часы/день: ${data.hours}
+График: ${data.schedule}
+Трек-код: ${code}`;
+
+    /* Отправка: сначала пробуем на бэкенд /api/telegram (Vercel),
+       чтобы токен был скрыт. Если не настроено — просто покажем код. */
+    try {
+      await fetch('/api/telegram', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({text: msg})
+      });
+    } catch (err) {
+      // Тихо игнорируем — код всё равно покажем
+    }
+
+    openModal(code);
+    f.reset();
+  });
+})();
+</script>
+
+
+<script>
+(function(){
+  const f = document.getElementById('applyForm');
+  if(!f) return;
+
+  // Pills
+  function bindPills(container){
+    const target = container.dataset.target;
+    const hidden = document.getElementById(target);
+    container.querySelectorAll('.wb-pill').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        container.querySelectorAll('.wb-pill').forEach(x=>x.classList.remove('active'));
+        btn.classList.add('active');
+        if(hidden) hidden.value = btn.dataset.value;
+      });
+    });
+  }
+  document.querySelectorAll('.wb-pills').forEach(bindPills);
+
+  // Phone mask
+  const phone = document.getElementById('phone');
+  if(phone){
+    function fmtPhone(v){
+      v = v.replace(/\D/g,'');
+      if(!v.startsWith('7')) v = '7'+v;
+      v = v.slice(0,11);
+      let out = '+7';
+      if(v.length>1){ out+=' ('+v.slice(1,4); if(v.length>=4) out+=')'; }
+      if(v.length>4){ out+=' '+v.slice(4,7); }
+      if(v.length>7){ out+='-'+v.slice(7,9); }
+      if(v.length>9){ out+='-'+v.slice(9,11); }
+      return out;
+    }
+    const onInput = e=> e.target.value = fmtPhone(e.target.value);
+    phone.addEventListener('input', onInput);
+    phone.addEventListener('blur', onInput);
+  }
+
+  // Date mask dd.mm.yyyy
+  const dob = document.getElementById('dob');
+  if(dob){
+    dob.addEventListener('input', e=>{
+      let v = e.target.value.replace(/\D/g,'').slice(0,8);
+      if(v.length>2) v = v.slice(0,2)+'.'+v.slice(2);
+      if(v.length>5) v = v.slice(0,5)+'.'+v.slice(5);
+      e.target.value = v;
+    });
+  }
+
+  // Helpers
+  function getTrack(){ return String(Math.floor(1000 + Math.random()*9000)); } // 4-значный, не начинается с 0
+  function buildMessage(fd, code){
+    const lines = [
+      'Новая анкета:',
+      `Имя: ${fd.get('firstName')} ${fd.get('lastName')}`,
+      `Телефон: ${fd.get('phone')}`,
+      `Дата рождения: ${fd.get('birth')}`,
+      `Платформа: ${fd.get('platform')}`,
+      `Опыт: ${fd.get('experience')}`,
+      `Часы в день: ${fd.get('hours')}`,
+      `График: ${fd.get('schedule')}`,
+      `Трек-код: ${code}`
+    ];
+    return lines.join('\n');
+  }
+
+  f.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+
+    // HTML5 required валидация
+    if(!f.checkValidity()){
+      f.reportValidity();
+      return;
+    }
+
+    const fd = new FormData(f);
+    const code = getTrack();
+    const msg = buildMessage(fd, code);
+
+    // Отправка на серверless-функцию (Vercel). Токен и chat_id берутся из ENV на хостинге.
+    try{
+      await fetch('/api/submit_disabled', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ text: msg })
+      });
+    }catch(_){ /* молча игнорируем: даже при ошибке покажем код */ }
+
+    // Показ модалки
+    const ok = document.getElementById('okModal');
+    if(ok){
+      ok.classList.add('show');
+      const trackEl = document.getElementById('trackCode');
+      if(trackEl) trackEl.textContent = code;
+      const copyBtn = document.getElementById('copyTrack');
+      if(copyBtn){
+        copyBtn.onclick = ()=>{
+          navigator.clipboard.writeText(code).then(()=>{
+            copyBtn.textContent='Скопировано';
+            setTimeout(()=>copyBtn.textContent='Скопировать',1500);
+          });
+        }
+      }
+      ok.querySelectorAll('.modal-close').forEach(b=>b.onclick=()=>ok.classList.remove('show'));
+    }else{
+      alert('Спасибо! Ваш трек-код: '+code);
+    }
+
+    f.reset();
+  });
+})();
+</script>
+
+<script>
+</script>
+
+<script>
+(function () {
+  const f = document.getElementById('applyForm') || document.getElementById('contactForm') || document.querySelector('form');
+  if (!f) return;
+  let sending = false;
+  let lastCode = null;
+  function getVal(name){
+    const checked = f.querySelector(`[name="${name}"]:checked`);
+    if (checked) return checked.value;
+    const el = f.querySelector(`[name="${name}"]`);
+    return el && el.value ? el.value : '-';
+  }
+  function genTrack(){ return String(Math.floor(1000 + Math.random()*9000)); }
+
+  const ok = document.getElementById('okModal');
+  const trackEl = document.getElementById('trackCode');
+  const copyBtn = document.getElementById('copyTrack');
+  const closeBtn = ok ? ok.querySelector('.modal-close') : null;
+  function openModal(){ if(ok) ok.classList.remove('hidden'); }
+  function closeModal(){ if(ok) ok.classList.add('hidden'); }
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (ok) ok.addEventListener('click', (e)=>{ if(e.target === ok) closeModal(); });
+  if (copyBtn) copyBtn.addEventListener('click', ()=>{
+    if (trackEl) navigator.clipboard.writeText(trackEl.textContent || '');
+    if (copyBtn){ const t=copyBtn.textContent; copyBtn.textContent='Скопировано'; setTimeout(()=>copyBtn.textContent=t,1200); }
+  });
+
+  f.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (sending) return;
+    if (f.checkValidity && !f.checkValidity()) { if (f.reportValidity) f.reportValidity(); return; }
+    sending = true;
+    if (!lastCode) lastCode = genTrack();
+
+    const first = getVal('firstName') || getVal('first_name') || getVal('name');
+    const last  = getVal('lastName')  || getVal('last_name');
+    const phone = getVal('phone') || getVal('tel') || getVal('phone_number');
+    const birth = getVal('birth') || getVal('birthday') || getVal('dob');
+    const platform = getVal('platform') || getVal('phoneOS');
+    const experience = getVal('experience') || getVal('exp');
+    const hours = getVal('hours');
+    const schedule = getVal('schedule');
+
+    const text =
+`🟣 Новая анкета
+👤 Имя: ${first}
+🧾 Фамилия: ${last}
+📞 Телефон: ${phone}
+🎂 Дата рождения: ${birth}
+📱 Платформа: ${platform}
+💼 Опыт: ${experience}
+⏱️ Часы/день: ${hours}
+🗓️ График: ${schedule}
+🔢 Трек-код: ${lastCode}`;
+
+    try {
+      await fetch('/api/telegram', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ text })
+      });
+    } catch (err) {}
+    if (trackEl) trackEl.textContent = lastCode;
+    openModal();
+    sending = false;
+  });
+})();
+</script>
+
+</body>
+</html>

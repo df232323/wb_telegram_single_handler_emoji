@@ -1,0 +1,97 @@
+<!DOCTYPE html><html lang="ru"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>О вакансии — Поддержка ППВЗ</title>
+<link rel="stylesheet" href="assets/style.css"></head><body>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo-text" href="index.html">WILDBERRIES</a>
+    <input type="checkbox" id="menu-toggle" class="menu-toggle" hidden>
+      <label for="menu-toggle" class="nav-dots" aria-label="Меню" role="button"></label>
+      <nav>
+      <ul>
+        <li><a href="index.html" >🏠 Главная</a></li>
+        <li><a href="about.html" class="active">🧑‍💼 Вакансия</a></li>
+        <li><a href="pay.html" >💰 Зарплата</a></li>
+        <li><a href="form.html" >📝 Анкета</a></li>
+        <li><a href="reviews.html" >⭐ Отзывы</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+<section class="wrap section-tight">
+  <div class="about">
+    <div class="card list">
+      <h2 class="section-title">Что нужно делать?</h2>
+      <ul>
+        <li>Обрабатывать обращения пользователей в чатах;</li>
+        <li>Консультировать пользователей по различным вопросам;</li>
+        <li>Вносить информацию в отчётность;</li>
+        <li>Работать со смежными программами для поиска информации.</li>
+      </ul>
+      <p class="muted">— Мы всегда на связи с нашими пользователями, готовы прийти им на помощь и решить поставленные задачи.</p>
+      <div class="pill" style="margin-top:8px">💳 Ежедневные выплаты на карту</div>
+    </div>
+    <div class="card"><img src="assets/about-what.png" alt=""></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="about">
+    <div class="card"><img src="assets/about-hand.png" alt=""></div>
+    <div class="card list">
+      <h2 class="section-title">Что вас ждёт?</h2>
+      <ul>
+        <li>Возможность трудоустройства без опыта работы;</li>
+        <li>Оплачиваемое дистанционное обучение;</li>
+        <li>Удалённое оформление по самозанятости;</li>
+        <li>Полностью удалённая работа;</li>
+        <li>График работы свободный, сколько часов работать вы выбираете сами;</li>
+        <li>Доход без ограничений;</li>
+        <li>Возможность карьерного роста;</li>
+        <li><b>Выплаты каждый день</b>.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2 class="section-title" style="margin-top:14px">Кого мы ищем?</h2>
+  <p class="muted">Вы — идеальный кандидат, если обладаете указанными качествами.</p>
+  <div class="traits-grid">
+    <article class="trait card"><div class="icon">✅</div><h4>Хорошее знание русского языка</h4><p>Грамотная письменная речь, орфография, пунктуация и грамматика.</p></article>
+    <article class="trait card"><div class="icon">🖥️</div><h4>Базовые навыки IT-грамотности</h4><p>Чистите кэш/куки, настраиваете VPN, владеете быстрой печатью.</p></article>
+    <article class="trait card"><div class="icon">💬</div><h4>Навыки коммуникации</h4><p>Подстраиваетесь под пользователя, заинтересованы в решении проблемы, ясно излагаете мысли.</p></article>
+  </div>
+  <div class="traits-grid" style="margin-top:18px">
+    <article class="trait card"><div class="icon">⏱️</div><h4>Умение управлять временем</h4><p>Рационально распоряжаетесь рабочим временем, соблюдаете дисциплину и ответственность.</p></article>
+    <article class="trait card"><div class="icon">💜</div><h4>Гибкость и оптимизм</h4><p>Находите общий язык, воспринимаете замечания, адаптируетесь к изменениям.</p></article>
+    <article class="trait card trait--cta center" style="align-items:center">
+      <div><div class="icon">⭐</div><h4 style="color:#b19700">Будет плюсом</h4><p>Опыт в колл-центре или онлайн-поддержке.</p></div>
+      <a class="btn btn-primary" href="form.html">К анкете</a>
+    </article>
+  </div>
+</section>
+
+
+<footer class="wrap center copy">
+  © 2025 Wildberries — поддержка ППВЗ
+</footer>
+<script src="assets/config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+/* mobile nav toggle */
+(function(){
+  const btn=document.querySelector('.nav-toggle');
+  const list=document.querySelector('header nav ul');
+  if(!btn||!list) return;
+  btn.addEventListener('click',()=>{
+    btn.classList.toggle('open');
+    list.classList.toggle('open');
+    document.body.classList.toggle('menu-open', list.classList.contains('open'));
+  });
+})();
+</script>
+</body></html>

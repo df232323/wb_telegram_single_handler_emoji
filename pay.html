@@ -1,0 +1,73 @@
+<!DOCTYPE html><html lang="ru"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Зарплата — Поддержка ППВЗ</title>
+<link rel="stylesheet" href="assets/style.css"></head><body>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo-text" href="index.html">WILDBERRIES</a>
+    <input type="checkbox" id="menu-toggle" class="menu-toggle" hidden>
+      <label for="menu-toggle" class="nav-dots" aria-label="Меню" role="button"></label>
+      <nav>
+      <ul>
+        <li><a href="index.html" >🏠 Главная</a></li>
+        <li><a href="about.html" >🧑‍💼 Вакансия</a></li>
+        <li><a href="pay.html" class="active">💰 Зарплата</a></li>
+        <li><a href="form.html" >📝 Анкета</a></li>
+        <li><a href="reviews.html" >⭐ Отзывы</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="wrap">
+  <h2 class="section-title">Доход и калькулятор</h2>
+  <div class="pay-grid">
+    <article class="card pay-card"><div class="muted">1 клиент</div><div class="price">800 ₽</div><div class="muted">в день</div></article>
+    <article class="card pay-card"><div class="muted">2 клиента</div><div class="price">1 600 ₽</div><div class="muted">в день</div></article>
+    <article class="card pay-card"><div class="muted">3 клиента</div><div class="price">2 400 ₽</div><div class="muted">в день</div></article>
+  </div>
+
+  <div class="calc">
+    <div class="card calc-box circle">
+      <h3>Калькулятор дохода</h3>
+      <p class="muted">За каждого принятого клиента начисляется <b>+800 ₽</b>. Выберите количество клиентов и рабочих дней.</p>
+      <div class="range-wrap"><label>Клиентов в день: <b id="cCount">2</b></label><input id="clients" type="range" min="1" max="50" value="2"></div>
+      <div class="range-wrap"><label>Рабочих дней в месяц: <b id="dCount">20</b></label><input id="days" type="range" min="1" max="31" value="20"></div>
+      <div class="range-wrap"><label>Часов работы в день (для справки): <b id="hCount">6</b></label><input id="hours" type="range" min="1" max="12" value="6"></div>
+      <script>
+        const c=document.getElementById('clients'), d=document.getElementById('days'), h=document.getElementById('hours');
+        const cC=document.getElementById('cCount'), dC=document.getElementById('dCount'), hC=document.getElementById('hCount');
+        [c,d,h].forEach(el=>el.addEventListener('input',()=>{cC.textContent=c.value;dC.textContent=d.value;hC.textContent=h.value;}));
+      </script>
+      <div class="cta-benefits">
+        <div class="b">💳 Ежедневные выплаты на карту</div>
+        <div class="b">📈 Доход без ограничений</div>
+        <div class="b">🏠 Полностью удалённо</div>
+      </div>
+    </div>
+    <div class="result-card center">
+      <div class="gauge" style="--p:10%"><div class="inner"><div class="muted" style="font-weight:700">в месяц</div><div id="income" class="result">0 ₽</div></div></div>
+    </div>
+  </div>
+</section>
+
+<footer class="wrap center copy">
+  © 2025 Wildberries — поддержка ППВЗ
+</footer>
+<script src="assets/config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+/* mobile nav toggle */
+(function(){
+  const btn=document.querySelector('.nav-toggle');
+  const list=document.querySelector('header nav ul');
+  if(!btn||!list) return;
+  btn.addEventListener('click',()=>{
+    btn.classList.toggle('open');
+    list.classList.toggle('open');
+    document.body.classList.toggle('menu-open', list.classList.contains('open'));
+  });
+})();
+</script>
+</body></html>
