@@ -6,7 +6,6 @@
   <title>Анкета — Поддержка ППВЗ</title>
   <link rel="stylesheet" href="assets/style.css">
 
-  <!-- Мини-стили модалки: чтобы окно 100% показывалось поверх всего -->
   <style>
     .modal { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; }
     .modal.hidden { display: none; }
@@ -20,18 +19,24 @@
     .center { text-align: center; }
     .muted { color: #6b6b7a; }
     .tg { color: #6c2bd9; font-weight: 800; text-decoration: none; }
-    .code-pill {
-      display: flex; align-items: center; justify-content: center; gap: 12px;
-      margin: 12px 0 16px;
-    }
-    .ok-check {
-      width: 32px; height: 32px; border-radius: 999px;
-      display: inline-flex; align-items: center; justify-content: center;
-      color: #fff; background: #16a34a; font-weight: 800;
-    }
+    .code-pill { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 12px 0 16px; }
+    .ok-check { width: 32px; height: 32px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; color: #fff; background: #16a34a; font-weight: 800; }
     .big-code { font-size: 42px; font-weight: 900; letter-spacing: 1px; }
     .pill-actions { display: flex; gap: 10px; justify-content: center; }
-    .btn-copy { border: 0; background: #eaf6ee; padding: 12px 16px; border-radius: 14px; font-weight: 700; cursor: pointer; }
+    .btn-copy {
+      border: 0;
+      background: #10b981;
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(16,185,129,.35);
+      transition: transform .08s ease, filter .2s;
+    }
+    .btn-copy:hover { filter: brightness(1.06); }
+    .btn-copy:active { transform: translateY(1px); }
+    .btn-copy:focus { outline: 2px solid #065f46; outline-offset: 2px; }
     .btn-tg { display: inline-block; background: linear-gradient(90deg,#7c3aed,#a855f7); color: #fff; text-decoration: none; padding: 12px 16px; border-radius: 14px; font-weight: 800; }
     .modal-close { margin: 8px auto 0; display: block; border: 0; background: none; color: #6b6b7a; cursor: pointer; }
   </style>
@@ -74,6 +79,12 @@
         <input class="wb-input" name="lastName" type="text" placeholder="Ваша фамилия" required>
       </div>
 
+      <!-- Новое поле Отчество -->
+      <div class="wb-field">
+        <label class="wb-label">Отчество</label>
+        <input class="wb-input" name="middleName" type="text" placeholder="Ваше отчество">
+      </div>
+
       <div class="wb-field">
         <label class="wb-label req">Телефон</label>
         <input class="wb-input" id="phone" name="phone" type="tel" inputmode="tel" placeholder="+7 (___) ___-__-__" required>
@@ -85,7 +96,6 @@
         <input class="wb-input" id="dob" name="birth" type="text" placeholder="дд.мм.гггг" inputmode="numeric" maxlength="10" required>
       </div>
 
-      <!-- ✅ НОВОЕ ПОЛЕ: Telegram -->
       <div class="wb-field">
         <label class="wb-label req">Telegram</label>
         <input class="wb-input" name="telegram" type="text" placeholder="@username" required>
@@ -138,32 +148,27 @@
   © 2025 Wildberries — поддержка ППВЗ
 </footer>
 
-<!-- ✅ Модальное окно успешной отправки -->
-<div id="okModal" class="modal hidden" aria-hidden="true">
-  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="okTitle">
-    <div id="okTitle" class="modal-title">Заявка отправлена</div>
+<div id="okModal" class="modal hidden">
+  <div class="modal-card">
+    <div class="modal-title">Заявка отправлена</div>
     <p class="center muted">
       Отправьте трек-код менеджеру в Telegram<br>
-      <a class="tg" href="https://t.me/WILDBERRIES_EKATERINA" target="_blank" rel="noopener">@WILDBERRIES_EKATERINA</a>
+      <a class="tg" href="https://t.me/WILDBERRIES_EKATERINA" target="_blank">@WILDBERRIES_EKATERINA</a>
     </p>
-
     <div class="code-pill">
       <span class="ok-check">✓</span>
       <span class="muted">Ваш трек-код:</span>
       <span id="trackCode" class="big-code">0000</span>
     </div>
-
     <div class="pill-actions">
-      <button id="copyTrack" class="btn-copy" type="button">Скопировать</button>
-      <a href="https://t.me/WILDBERRIES_EKATERINA" target="_blank" rel="noopener" class="btn-tg">Написать в Telegram</a>
+      <button id="copyTrack" class="btn-copy">Скопировать</button>
+      <a href="https://t.me/WILDBERRIES_EKATERINA" target="_blank" class="btn-tg">Написать в Telegram</a>
     </div>
-
-    <button class="modal-close" aria-label="Закрыть">Закрыть</button>
+    <button class="modal-close">Закрыть</button>
   </div>
 </div>
 
 <script>
-/* маленький скрипт для "пилюль" (iPhone/Android, Опыт) */
 document.querySelectorAll('.wb-pills').forEach(group => {
   const target = group.getAttribute('data-target');
   const hidden = document.querySelector(`input[name="${target}"]`);
@@ -183,14 +188,10 @@ document.querySelectorAll('.wb-pills').forEach(group => {
   window.__WB_FORM_HANDLER_INSTALLED__ = true;
 
   const f = document.getElementById('applyForm');
-  if (!f) return;
-
   let sending = false;
   let lastCode = window.__WB_TRACK_CODE__ || null;
 
-  function genTrack() {
-    return String(Math.floor(1000 + Math.random() * 9000));
-  }
+  function genTrack() { return String(Math.floor(1000 + Math.random() * 9000)); }
   function getVal(name) {
     const checked = f.querySelector(`[name="${name}"]:checked`);
     if (checked) return checked.value;
@@ -201,59 +202,63 @@ document.querySelectorAll('.wb-pills').forEach(group => {
   const ok = document.getElementById('okModal');
   const trackEl = document.getElementById('trackCode');
   const copyBtn = document.getElementById('copyTrack');
-  const closeBtn = ok ? ok.querySelector('.modal-close') : null;
+  const closeBtn = ok.querySelector('.modal-close');
 
-  function openModal() { if (ok) ok.classList.remove('hidden'); }
-  function closeModal() { if (ok) ok.classList.add('hidden'); }
+  function openModal() { ok.classList.remove('hidden'); }
+  function closeModal() { ok.classList.add('hidden'); }
 
-  if (closeBtn) closeBtn.addEventListener('click', closeModal);
-  if (ok) ok.addEventListener('click', (e) => { if (e.target === ok) closeModal(); });
-  if (copyBtn) copyBtn.addEventListener('click', () => {
-    if (trackEl) navigator.clipboard.writeText(trackEl.textContent || '');
-    if (copyBtn) { const t = copyBtn.textContent; copyBtn.textContent = 'Скопировано'; setTimeout(() => copyBtn.textContent = t, 1200); }
+  closeBtn.addEventListener('click', closeModal);
+  ok.addEventListener('click', e => { if (e.target === ok) closeModal(); });
+  copyBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText(trackEl.textContent || '');
+    const t = copyBtn.textContent;
+    copyBtn.textContent = 'Скопировано';
+    setTimeout(() => copyBtn.textContent = t, 1200);
   });
 
-  f.addEventListener('submit', async (e) => {
+  f.addEventListener('submit', async e => {
     e.preventDefault();
     if (sending) return;
-    if (f.checkValidity && !f.checkValidity()) { if (f.reportValidity) f.reportValidity(); return; }
+    if (f.checkValidity && !f.checkValidity()) { f.reportValidity(); return; }
     sending = true;
-
     if (!lastCode) lastCode = genTrack();
     window.__WB_TRACK_CODE__ = lastCode;
 
-    // читаем поля
-    const first     = getVal('firstName');
-    const last      = getVal('lastName');
-    const phone     = getVal('phone');
-    const birth     = getVal('birth');
-    const telegram  = getVal('telegram');
-    const platform  = getVal('platform');
-    const experience= getVal('experience');
-    const hours     = getVal('hours');
-    const schedule  = getVal('schedule');
+    const data = {
+      first: getVal('firstName'),
+      last: getVal('lastName'),
+      middle: getVal('middleName'),
+      phone: getVal('phone'),
+      birth: getVal('birth'),
+      telegram: getVal('telegram'),
+      platform: getVal('platform'),
+      experience: getVal('experience'),
+      hours: getVal('hours'),
+      schedule: getVal('schedule')
+    };
 
     const text = `🟣 Новая анкета
-👤 Имя: ${first}
-🧾 Фамилия: ${last}
-📞 Телефон: ${phone}
-🎂 Дата рождения: ${birth}
-✈️ Telegram: ${telegram}
-📱 Платформа: ${platform}
-💼 Опыт: ${experience}
-⏱️ Часы/день: ${hours}
-🗓️ График: ${schedule}
+👤 Имя: ${data.first}
+🧾 Фамилия: ${data.last}
+👥 Отчество: ${data.middle}
+📞 Телефон: ${data.phone}
+🎂 Дата рождения: ${data.birth}
+✈️ Telegram: ${data.telegram}
+📱 Платформа: ${data.platform}
+💼 Опыт: ${data.experience}
+⏱️ Часы/день: ${data.hours}
+🗓️ График: ${data.schedule}
 🔢 Трек-код: ${lastCode}`;
 
     try {
       await fetch('/api/telegram', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, track: lastCode }),
+        body: JSON.stringify({ text, track: lastCode })
       });
-    } catch (_) {}
+    } catch (e) { console.warn('Ошибка отправки', e); }
 
-    if (trackEl) trackEl.textContent = lastCode;
+    trackEl.textContent = lastCode;
     openModal();
     sending = false;
   });
