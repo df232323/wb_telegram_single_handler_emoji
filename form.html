@@ -6,41 +6,26 @@
   <title>Анкета — Поддержка ППВЗ</title>
   <link rel="stylesheet" href="assets/style.css">
 
-  <style>
-    .modal { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; }
-    .modal.hidden { display: none; }
-    .modal-card {
-      width: min(560px, calc(100% - 32px));
-      background: #fff; border-radius: 24px;
-      box-shadow: 0 30px 80px rgba(0,0,0,.22);
-      padding: 22px 22px 18px;
-    }
-    .modal-title { font-weight: 800; font-size: 20px; margin-bottom: 8px; text-align: center; }
-    .center { text-align: center; }
-    .muted { color: #6b6b7a; }
-    .tg { color: #6c2bd9; font-weight: 800; text-decoration: none; }
-    .code-pill { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 12px 0 16px; }
-    .ok-check { width: 32px; height: 32px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; color: #fff; background: #16a34a; font-weight: 800; }
-    .big-code { font-size: 42px; font-weight: 900; letter-spacing: 1px; }
-    .pill-actions { display: flex; gap: 10px; justify-content: center; }
-    .btn-copy {
-      border: 0;
-      background: #10b981;
-      color: #fff;
-      padding: 12px 16px;
-      border-radius: 14px;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow: 0 6px 18px rgba(16,185,129,.35);
-      transition: transform .08s ease, filter .2s;
-    }
-    .btn-copy:hover { filter: brightness(1.06); }
-    .btn-copy:active { transform: translateY(1px); }
-    .btn-copy:focus { outline: 2px solid #065f46; outline-offset: 2px; }
-    .btn-tg { display: inline-block; background: linear-gradient(90deg,#7c3aed,#a855f7); color: #fff; text-decoration: none; padding: 12px 16px; border-radius: 14px; font-weight: 800; }
-    .modal-close { margin: 8px auto 0; display: block; border: 0; background: none; color: #6b6b7a; cursor: pointer; }
-  </style>
+  <!-- Yandex.Metrika counter -->
+  <script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105215494', 'ym');
+
+    ym(105215494, 'init', {
+      ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer",
+      accurateTrackBounce:true, trackLinks:true
+    });
+  </script>
+  <noscript>
+    <div><img src="https://mc.yandex.ru/watch/105215494" style="position:absolute; left:-9999px;" alt="" /></div>
+  </noscript>
+  <!-- /Yandex.Metrika counter -->
 </head>
+
 <body>
 
 <header>
@@ -66,8 +51,6 @@
 
   <form id="applyForm" class="wb-form" novalidate>
     <h2 class="wb-title">Анкета кандидата</h2>
-    <p class="wb-sub">Заполните короткую форму — мы сгенерируем персональный трек-код и подскажем, что делать дальше.</p>
-
     <div class="wb-grid">
       <div class="wb-field">
         <label class="wb-label req">Имя</label>
@@ -79,10 +62,9 @@
         <input class="wb-input" name="lastName" type="text" placeholder="Ваша фамилия" required>
       </div>
 
-      <!-- Новое поле Отчество -->
       <div class="wb-field">
-        <label class="wb-label">Отчество</label>
-        <input class="wb-input" name="middleName" type="text" placeholder="Ваше отчество">
+        <label class="wb-label req">Отчество</label>
+        <input class="wb-input" name="middleName" type="text" placeholder="Ваше отчество" required>
       </div>
 
       <div class="wb-field">
@@ -139,7 +121,6 @@
       <span class="wb-badge">🎧 Работа в чате</span>
       <span class="wb-badge">🏡 Полностью удалённо</span>
     </div>
-
     <div class="wb-foot">© 2025 Wildberries — поддержка ППВЗ</div>
   </form>
 </section>
@@ -148,39 +129,28 @@
   © 2025 Wildberries — поддержка ППВЗ
 </footer>
 
+<!-- Модальное окно успешной отправки -->
 <div id="okModal" class="modal hidden">
   <div class="modal-card">
     <div class="modal-title">Заявка отправлена</div>
-    <p class="center muted">
-      Отправьте трек-код менеджеру в Telegram<br>
-      <a class="tg" href="https://t.me/WILDBERRIES_EKATERINA" target="_blank">@WILDBERRIES_EKATERINA</a>
+    <p class="center muted">Отправьте трек-код менеджеру в Telegram<br>
+      <a class="tg" href="https://t.me/WILDBERRIES_EKATERINA" target="_blank" rel="noopener">@WILDBERRIES_EKATERINA</a>
     </p>
+
     <div class="code-pill">
-      <span class="ok-check">✓</span>
+      <span class="ok-check">✅</span>
       <span class="muted">Ваш трек-код:</span>
       <span id="trackCode" class="big-code">0000</span>
     </div>
+
     <div class="pill-actions">
-      <button id="copyTrack" class="btn-copy">Скопировать</button>
-      <a href="https://t.me/WILDBERRIES_EKATERINA" target="_blank" class="btn-tg">Написать в Telegram</a>
+      <button id="copyTrack" class="btn-copy">📋 Скопировать</button>
+      <a href="https://t.me/WILDBERRIES_EKATERINA" target="_blank" rel="noopener" class="btn-tg">✉️ Написать в Telegram</a>
     </div>
-    <button class="modal-close">Закрыть</button>
+
+    <button class="modal-close link-muted" aria-label="Закрыть">Закрыть</button>
   </div>
 </div>
-
-<script>
-document.querySelectorAll('.wb-pills').forEach(group => {
-  const target = group.getAttribute('data-target');
-  const hidden = document.querySelector(`input[name="${target}"]`);
-  group.addEventListener('click', (e) => {
-    const btn = e.target.closest('.wb-pill');
-    if (!btn) return;
-    group.querySelectorAll('.wb-pill').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    if (hidden) hidden.value = btn.dataset.value || btn.textContent.trim();
-  });
-});
-</script>
 
 <script>
 (function () {
@@ -188,46 +158,50 @@ document.querySelectorAll('.wb-pills').forEach(group => {
   window.__WB_FORM_HANDLER_INSTALLED__ = true;
 
   const f = document.getElementById('applyForm');
+  if (!f) return;
+
   let sending = false;
   let lastCode = window.__WB_TRACK_CODE__ || null;
 
-  function genTrack() { return String(Math.floor(1000 + Math.random() * 9000)); }
+  function genTrack() {
+    return String(Math.floor(1000 + Math.random() * 9000));
+  }
   function getVal(name) {
-    const checked = f.querySelector(`[name="${name}"]:checked`);
-    if (checked) return checked.value;
     const el = f.querySelector(`[name="${name}"]`);
-    return el && el.value ? el.value.trim() : '-';
+    return el && el.value ? el.value : '-';
   }
 
   const ok = document.getElementById('okModal');
   const trackEl = document.getElementById('trackCode');
   const copyBtn = document.getElementById('copyTrack');
-  const closeBtn = ok.querySelector('.modal-close');
+  const closeBtn = ok ? ok.querySelector('.modal-close') : null;
+  function openModal() { if (ok) ok.classList.remove('hidden'); }
+  function closeModal() { if (ok) ok.classList.add('hidden'); }
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (ok) ok.addEventListener('click', e => { if (e.target === ok) closeModal(); });
+  if (copyBtn)
+    copyBtn.addEventListener('click', () => {
+      if (trackEl) navigator.clipboard.writeText(trackEl.textContent || '');
+      copyBtn.textContent = '✅ Скопировано';
+      setTimeout(() => copyBtn.textContent = '📋 Скопировать', 1200);
+    });
 
-  function openModal() { ok.classList.remove('hidden'); }
-  function closeModal() { ok.classList.add('hidden'); }
-
-  closeBtn.addEventListener('click', closeModal);
-  ok.addEventListener('click', e => { if (e.target === ok) closeModal(); });
-  copyBtn.addEventListener('click', () => {
-    navigator.clipboard.writeText(trackEl.textContent || '');
-    const t = copyBtn.textContent;
-    copyBtn.textContent = 'Скопировано';
-    setTimeout(() => copyBtn.textContent = t, 1200);
-  });
-
-  f.addEventListener('submit', async e => {
+  f.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (sending) return;
-    if (f.checkValidity && !f.checkValidity()) { f.reportValidity(); return; }
+    if (f.checkValidity && !f.checkValidity()) {
+      f.reportValidity();
+      return;
+    }
     sending = true;
+
     if (!lastCode) lastCode = genTrack();
     window.__WB_TRACK_CODE__ = lastCode;
 
     const data = {
-      first: getVal('firstName'),
-      last: getVal('lastName'),
-      middle: getVal('middleName'),
+      firstName: getVal('firstName'),
+      lastName: getVal('lastName'),
+      middleName: getVal('middleName'),
       phone: getVal('phone'),
       birth: getVal('birth'),
       telegram: getVal('telegram'),
@@ -238,12 +212,12 @@ document.querySelectorAll('.wb-pills').forEach(group => {
     };
 
     const text = `🟣 Новая анкета
-👤 Имя: ${data.first}
-🧾 Фамилия: ${data.last}
-👥 Отчество: ${data.middle}
+👤 Имя: ${data.firstName}
+🧾 Фамилия: ${data.lastName}
+🧩 Отчество: ${data.middleName}
 📞 Телефон: ${data.phone}
 🎂 Дата рождения: ${data.birth}
-✈️ Telegram: ${data.telegram}
+💬 Telegram: ${data.telegram}
 📱 Платформа: ${data.platform}
 💼 Опыт: ${data.experience}
 ⏱️ Часы/день: ${data.hours}
@@ -254,11 +228,13 @@ document.querySelectorAll('.wb-pills').forEach(group => {
       await fetch('/api/telegram', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, track: lastCode })
+        body: JSON.stringify({ text, track: lastCode }),
       });
-    } catch (e) { console.warn('Ошибка отправки', e); }
+    } catch (err) {
+      console.warn('Ошибка отправки', err);
+    }
 
-    trackEl.textContent = lastCode;
+    if (trackEl) trackEl.textContent = lastCode;
     openModal();
     sending = false;
   });
